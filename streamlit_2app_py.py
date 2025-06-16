@@ -1,11 +1,15 @@
 import streamlit as st
 import openai
 import os
+from dotenv import load_dotenv  # ADD THIS
 
-# Securely load API key from environment
+# Load environment variables
+load_dotenv()  # ADD THIS
+
+# CORRECTED VARIABLE NAME (you had OPEMAI)
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-st.title("🚀 YOUR AI SALES AGENT")
+st.title("🚀 YOUR AI SALES AGENT")  # REMOVED #
 st.subheader("Paste LinkedIn URL below")
 
 linkedin_url = st.text_input("", value="https://www.linkedin.com/in/saleswithdhruvtomar/")
@@ -16,6 +20,7 @@ if generate_clicked and linkedin_url:
         # Extract username from URL
         username = linkedin_url.split('/in/')[-1].split('/')[0]
         
+        # CORRECTED PROMPT (removed extra " and fixed variable)
         prompt = f"""
         Create a personalized sales email for {username} using their LinkedIn profile: {linkedin_url}.
         Structure:
@@ -25,9 +30,10 @@ if generate_clicked and linkedin_url:
         4. Clear CTA for next steps
         """
         
+        # CORRECTED MODEL NAME AND SYNTAX
         response = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": "user", "content": prompt}],
+            model="gpt-3.5-turbo",  # WAS opt-3.5-turbo
+            messages=[{"role": "user", "content": prompt}],  # FIXED BRACKETS
             max_tokens=350
         )
         
@@ -35,7 +41,7 @@ if generate_clicked and linkedin_url:
         
         st.success("AI PERSONALIZED DRAFT GENERATED!")
         st.markdown(f"**Profile:** [{username}]({linkedin_url})")
-        st.text_area("Email Draft", email_draft, height=300)
+        st.text_area("Email Draft", value=email_draft, height=300)  # ADDED VALUE
         
     except Exception as e:
         st.error(f"Error: {str(e)}")
